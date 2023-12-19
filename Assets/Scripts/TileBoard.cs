@@ -3,14 +3,11 @@ using UnityEngine;
 
 public class TileBoard : MonoBehaviour
 {
-
-    private TileGrid grid;
+    public static TileBoard Instance;
     public TileState[] tileStates;
+
     private void Awake()
     {
-        grid = GetComponentInChildren<TileGrid>();
-    }
-    private void Start()
-    {
+        if (Instance == null) Instance = this;
     }
 }

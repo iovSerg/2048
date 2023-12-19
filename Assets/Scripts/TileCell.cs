@@ -11,9 +11,13 @@ public class TileCell : MonoBehaviour
     public bool IsEmpty => Value == 0;
     public const int MaxValue = 11;
 
-    [SerializeField] private Image image;
+    [SerializeField] private Color color;
+    [SerializeField] private Image background;
     [SerializeField] TextMeshProUGUI points;
-
+    public void DefaultColor(Color color)
+    {
+        this.color = color;
+    }
     public void SetValue(int x, int y, int value)
     {
         this.X = x;
@@ -25,5 +29,8 @@ public class TileCell : MonoBehaviour
     public void UpdateCell()
     {
         points.text = IsEmpty ? string.Empty : Points.ToString();
+        if (Value != 0)
+            background.sprite = TileBoard.Instance.tileStates[Value].sprite;
+        else background.color = color;
     }
 }
