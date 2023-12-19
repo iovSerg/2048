@@ -1,0 +1,4 @@
+repository "2048@greSvoi@cloud"
+  path "/"
+    br "/main"
+    co "/main"
