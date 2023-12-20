@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,10 +14,19 @@ public class TileCell : MonoBehaviour
 
     [SerializeField] private Color color;
     [SerializeField] private Image background;
+    [SerializeField] private Image sprite;
     [SerializeField] TextMeshProUGUI points;
+
+    private Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
     public void DefaultColor(Color color)
     {
         this.color = color;
+        background.color = color;
     }
     public void SetValue(int x, int y, int value)
     {
@@ -25,12 +35,45 @@ public class TileCell : MonoBehaviour
         this.Value = value;
         UpdateCell();
     }
+    [ContextMenu("Image Rotate")]
+    public void TestUpdateCell() 
+    {
+        animator.SetTrigger("Switch");
+        StartCoroutine(SwitchSpriteCell());
+    }
+    private IEnumerator SwitchSpriteCell()
+    {
+        yield return new WaitForSeconds(1f);
+        points.text = IsEmpty ? string.Empty : Points.ToString();
+        if (Value != 0)
+        {
+            background.color = TileBoard.Instance.tileStates[2].backgroundColor;
+            sprite.sprite = TileBoard.Instance.tileStates[2].sprite;
+            sprite.color = Color.white;
+            yield return new WaitForSeconds(1.5f);
+            sprite.rectTransform.rotation = Quaternion.identity;
+        }
+        else
+        {
+            background.color = color;
+            sprite.color = color;
 
+        }
+    }
     public void UpdateCell()
     {
         points.text = IsEmpty ? string.Empty : Points.ToString();
         if (Value != 0)
-            background.sprite = TileBoard.Instance.tileStates[Value].sprite;
-        else background.color = color;
+        {
+            background.color = TileBoard.Instance.tileStates[Value].backgroundColor;
+            sprite.sprite = TileBoard.Instance.tileStates[Value].sprite;
+            sprite.color = Color.white;
+        }
+        else
+        {
+            background.color = color;
+            sprite.color = color;
+
+        }
     }
 }

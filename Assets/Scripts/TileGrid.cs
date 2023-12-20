@@ -20,14 +20,20 @@ public class TileGrid : MonoBehaviour
    [SerializeField] private Color[] color;
    [SerializeField] private RectTransform rt;
    
+    public static TileGrid Instance;
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        
+    }
     private void Start()
     {
-        rt.sizeDelta = new Vector2(Screen.width, Screen.width);
-        fieldCell = new TileCell[_fieldSize,_fieldSize];
-        GenerateField();
     }
-    private void GenerateField()
+    public void CreateField()
     {
+        rt.sizeDelta = new Vector2(Screen.width, Screen.width);
+        fieldCell = new TileCell[_fieldSize, _fieldSize];
         _width = Screen.width;
         _height = _width;
         _cellSize = (_width - _space * 5) / 4;
@@ -50,23 +56,24 @@ public class TileGrid : MonoBehaviour
             }
            
         }
-        for (int i = 0; i < _initialCount;i++)
+
+    }
+    public void GenerateField()
+    {
+        if (fieldCell == null) CreateField();
+
+        for (int x = 0; x < _fieldSize; x++)
+        {
+            for (int y = 0; y < _fieldSize; y++)
+            {
+                fieldCell[x, y].SetValue(x, y, 0);
+            }
+        }
+        for (int i = 0; i < _initialCount; i++)
         {
             GenerateRandomCell();
         }
     }
-    //public void GenerateBoard()
-    //{
-    //    if (fieldCell == null) CreateField();
-
-    //    for (int x = 0; x < _fieldSize; x++)
-    //    {
-    //        for (int y = 0; y < _fieldSize; y++)
-    //        {
-    //            fieldCell[x, y].SetValue(x, y, 0);
-    //        }
-    //    }
-    //}
     private void GenerateRandomCell()
     {
         var emptyCells = new List<TileCell>();
